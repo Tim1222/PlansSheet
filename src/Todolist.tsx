@@ -17,10 +17,6 @@ export type TasksType = {
 
 export function Todolist(props: PropsType) {
 
-    const OnClickButton = () => {
-        // console.log(props.tasks)
-    }
-
     return (
         <div>
             <h3>{props.title}</h3>
