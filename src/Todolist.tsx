@@ -30,7 +30,9 @@ export function Todolist(props: PropsType) {
         }
     }
     const addTask = () => {
-
+        if( newTaskTitleset.trim() === "") {
+            return
+        }
         props.addTask(newTaskTitleset)
         setNewTaskTitle('')
     }
