@@ -1,5 +1,7 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
 import {FilterValuesType} from "./App";
+import {Simulate} from "react-dom/test-utils";
+import error = Simulate.error;
 
 
 type PropsType = {
@@ -9,6 +11,7 @@ type PropsType = {
     changeFilter: (value: FilterValuesType) => void
     addTask: (title: string) => void
     changeTaskStatus: (taskId: string, isDone: boolean) => void
+    filter: FilterValuesType
 }
 
 export type TasksType = {
@@ -20,21 +23,24 @@ export type TasksType = {
 export function Todolist(props: PropsType) {
 
     const [newTaskTitleset, setNewTaskTitle] = useState('')
+    const [error, setError] = useState('')
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setNewTaskTitle(e.currentTarget.value)
     }
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+        setError('')
         if (e.charCode === 13) {
             props.addTask(newTaskTitleset)
             setNewTaskTitle('')
         }
     }
     const addTask = () => {
-        if( newTaskTitleset.trim() === "") {
-            return
+        if (newTaskTitleset.trim() !== "") {
+            props.addTask(newTaskTitleset)
+            setNewTaskTitle('')
+        } else {
+            setError('Title is required')
         }
-        props.addTask(newTaskTitleset)
-        setNewTaskTitle('')
     }
     const onAllClickHandler = () => props.changeFilter('all')
     const onActiveClickHandler = () => props.changeFilter('active')
@@ -49,9 +55,10 @@ export function Todolist(props: PropsType) {
                     value={newTaskTitleset}
                     onChange={onChangeHandler}
                     onKeyPress={onKeyPressHandler}
+                    className={error ? 'error' : ''}
                 />
-                <button onClick={addTask}>+
-                </button>
+                <button onClick={addTask}>+</button>
+                {error && <div className='error-message'>Field is required</div>}
             </div>
             <ul>
                 {
@@ -79,9 +86,9 @@ export function Todolist(props: PropsType) {
 
             </ul>
             <div>
-                <button onClick={onAllClickHandler}>All</button>
-                <button onClick={onActiveClickHandler}>Active</button>
-                <button onClick={onCopmletedClickHandler}>Completed</button>
+                <button className={props.filter === 'all' ? 'active-filter': ''} onClick={onAllClickHandler}>All</button>
+                <button className={props.filter === 'active' ? 'active-filter': ''} onClick={onActiveClickHandler}>Active</button>
+                <button className={props.filter === 'completed' ? 'active-filter': ''} onClick={onCopmletedClickHandler}>Completed</button>
             </div>
         </div>
     )
