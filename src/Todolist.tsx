@@ -45,9 +45,9 @@ export function Todolist(props: PropsType) {
 
     return (
         <div>
-            <h3> <EditableSpan title={props.title} onChange={changeTodolistTitle}/>
+            <h3><EditableSpan title={props.title} onChange={changeTodolistTitle}/>
                 <IconButton onClick={removeTodolist}>
-                    <Delete />
+                    <Delete/>
                 </IconButton>
             </h3>
             <AddItemForm addItem={addTask}/>
@@ -72,7 +72,7 @@ export function Todolist(props: PropsType) {
                             />
                                 <EditableSpan title={t.title} onChange={onChangeTitleleHandler}/>
                                 <IconButton onClick={onRemoveHandler}>
-                                    <Delete />
+                                    <Delete/>
                                 </IconButton>
                             </div>
                         }
@@ -80,8 +80,8 @@ export function Todolist(props: PropsType) {
                 }
 
             </div>
-            <ButtonGroup variant={'outlined'} style={ {paddingTop: '10px' } } >
-                <Button variant={props.filter === 'all' ? 'contained' : 'text'}  onClick={onAllClickHandler}>All
+            <ButtonGroup variant={'outlined'} style={{paddingTop: '10px'}}>
+                <Button variant={props.filter === 'all' ? 'contained' : 'text'} onClick={onAllClickHandler}>All
                 </Button>
                 <Button color={'info'} variant={props.filter === 'active' ? 'contained' : 'text'}
                         onClick={onActiveClickHandler}>Active
@@ -90,7 +90,7 @@ export function Todolist(props: PropsType) {
                         onClick={onCopmletedClickHandler}>Completed
                 </Button>
 
-            </ButtonGroup >
+            </ButtonGroup>
         </div>
     )
 }
