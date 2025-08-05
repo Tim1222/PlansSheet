@@ -12,6 +12,7 @@ import {
     removeTodolistAC,
     todolistsReducer
 } from "./state/todolist-Reducer";
+import {changeTaskStatusAC, changeTasksTitleAC, createTaskAC, deleteTaskAC, tasksReducer} from "./state/tasks-Reducer";
 
 
 export type FilterValuesType = 'all' | 'completed' | 'active'
@@ -34,7 +35,7 @@ function App() {
         {id: todolist1, title: "What to learn", filter: "all"},
         {id: todolist2, title: "What to buy", filter: "all"}
     ])
-    let [tasksObj, dispatchTasksObj] = useReducer(tasksObjReducer, {
+    let [tasksObj, dispatchTasksObj] = useReducer(tasksReducer, {
         [todolist1]: [
             {id: v1(), title: 'CSS', isDone: true},
             {id: v1(), title: 'JS', isDone: true},
@@ -49,44 +50,27 @@ function App() {
 
     //CRUD TASK
     const removeTask = (id: string, todolistId: string) => {
-        let tasks = tasksObj[todolistId]
-        let filteredTasks = tasks.filter(t => t.id !== id)
-        tasksObj[todolistId] = filteredTasks
-        setTasksObj({...tasksObj})
+
+        dispatchTasksObj(deleteTaskAC({id: todolistId, taskId: id}))
     }
 
     const addTask = (title: string, todolistId: string) => {
-        let newTask = {id: v1(), title: title, isDone: false}
-        let tasks = tasksObj[todolistId]
-        let newTasks = [newTask, ...tasks]
-        tasksObj[todolistId] = newTasks
-        setTasksObj({...tasksObj})
+        dispatchTasksObj(createTaskAC({title: title, todolistId: todolistId}))
     }
 
     const changeStatus = (taskId: string, isDone: boolean, todolistId: string) => {
-        let tasks = tasksObj[todolistId]
-        let task = tasks.find(t => t.id === taskId)
-        if (task) {
-            task.isDone = isDone
-            setTasksObj({...tasksObj})
-        }
-
+        dispatchTasksObj(changeTaskStatusAC({taskId, isDone, todolistId}))
     }
 
     const changeTaskTitle = (taskId: string, newTitle: string, todolistId: string) => {
-        let tasks = tasksObj[todolistId]
-        let task = tasks.find(t => t.id === taskId)
-        if (task) {
-            task.title = newTitle
-            setTasksObj({...tasksObj})
-        }
+  dispatchTasksObj(changeTasksTitleAC({todolistId, taskId, title: newTitle}))
     }
 
     //CRUD TODO
     const removeTodolist = (todolistId: string) => {
 
         dispatchTodolists(removeTodolistAC(todolistId))
-        delete tasksObj[todolistId]
+        // delete tasksObj[todolistId]
     }
 
     const addTodolist = (title: string) => {
